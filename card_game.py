@@ -1,32 +1,45 @@
+'''
+Card Game that populates a deck, shuffles it, deals hands to specs, and scores.
+
+Rank and Suit are used to create a sorted deck for reference. Random's shuffle
+method is used to shuffle the order of the sorted deck. The game is played by
+dealing hands to the number of players for the number of cards specified. The
+score is calculated by rank * suit (4=c, 3=h, 2=d, 1=s) and leaderboard posted.
+'''
 import random
 def shuffle_deck(deck):
+    '''Returns deck in shuffled order of input deck'''
     shuffle_indx = list(range(52))
     random.shuffle(shuffle_indx)
-    shuffled_deck = []
+    temp_shuffled_deck = []
     for i in shuffle_indx:
-        shuffled_deck.append(deck[i])
-    return shuffled_deck
+        temp_shuffled_deck.append(deck[i])
+    return temp_shuffled_deck
 
 def get_top_card(deck):
+    '''Returns top card and updated deck from an input deck'''
     if len(deck) < 1:
         return "error", deck
     top_card = deck.pop()
     return top_card, deck
 
 def play_a_game(deck, players, cards_each):
-    hands = []
+    '''Returns list of dealt hands from inputs of deck, players to deal, and cards dealt to each'''
+    temp_hands = []
     for _ in range(players):
-        hands.append([])
+        temp_hands.append([])
     for num in range(players * cards_each):
         card, deck = get_top_card(deck)
-        hands[num % players].append(card)
-    return hands
+        temp_hands[num % players].append(card)
+    return temp_hands
 
 def sort_hand(single_hand):
+    '''Returns sorted hand based on each card's index in original sorted deck'''
     sorted_hand = sorted(single_hand, key=lambda x: sorted_deck.index(x))
     return sorted_hand
 
 def score_hand(single_hand):
+    '''Returns the point value of a hand based on rank and suit'''
     total = 0
     for card in single_hand:
         if card == "error":
@@ -68,10 +81,10 @@ print(f"Starting Deck: {sorted_deck}")
 shuffled_deck = shuffle_deck(sorted_deck)
 print(f"Shuffled Deck: {shuffled_deck}")
 
-players = int(input("How many players? "))
-cards_each = int(input("How many cards each? "))
+game_players = int(input("How many players? "))
+game_cards_each = int(input("How many cards each? "))
 
-hands = play_a_game(shuffled_deck, players, cards_each)
+hands = play_a_game(shuffled_deck, game_players, game_cards_each)
 print(f"Dealt Hands: {hands}")
 sorted_hands = [sort_hand(hand) for hand in hands]
 print(f"Sorted Hands: {sorted_hands}")
@@ -84,7 +97,7 @@ rank_indx = {score: rank for rank, score in enumerate(unique_scores)}
 ranks = [rank_indx[score] for score in scores]
 print(f"Player Scores: {scores}")
 print(f"Player Ranks: {ranks}")
-for rank in range(players):
+for rank in range(game_players):
     rank_indices = [i for i, v in enumerate(ranks) if v == rank]
     for h in rank_indices:
         print(f"Player{h + 1} had {hands[h]} for a score of {scores[h]} and rank {ranks[h] + 1}")
