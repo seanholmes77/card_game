@@ -91,7 +91,7 @@ print(f"Sorted Hands: {sorted_hands}")
 
 scores = [score_hand(hand) for hand in hands]
 winner = scores.index(max(scores))
-print(f"Player{winner + 1} wins with {hands[winner]}")
+print(f"Player {winner + 1} wins with {sorted_hands[winner]}")
 unique_scores = sorted(set(scores), reverse=True)
 rank_indx = {score: rank for rank, score in enumerate(unique_scores)}
 ranks = [rank_indx[score] for score in scores]
@@ -100,5 +100,4 @@ print(f"Player Ranks: {ranks}")
 for rank in range(game_players):
     rank_indices = [i for i, v in enumerate(ranks) if v == rank]
     for h in rank_indices:
-        print(f"Player{h + 1} had {hands[h]} for a score of {scores[h]} and rank {ranks[h] + 1}")
-
+        print(f"Player {h + 1} had {sorted_hands[h]} for a score of {scores[h]} and rank {ranks[h] + 1}")
