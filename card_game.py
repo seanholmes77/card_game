@@ -105,7 +105,7 @@ def main():
             for h in rank_indices:
                 print(f"Player {h + 1} had {sorted_hands[h]} for a score of {scores[h]} and rank {ranks[h] + 1}")
     except:
-        print("Oh no! There was an error dealing the card game.")
+        print("Oh no! There was an error with the card game.")
 
 if __name__ == '__main__':
     main()
