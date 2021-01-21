@@ -33,71 +33,76 @@ def play_a_game(deck, players, cards_each):
         temp_hands[num % players].append(card)
     return temp_hands
 
-def sort_hand(single_hand):
+def sort_hand(single_hand, sorted_deck):
     '''Returns sorted hand based on each card's index in original sorted deck'''
+    sorted_deck.insert(0, "error")
     sorted_hand = sorted(single_hand, key=lambda x: sorted_deck.index(x))
     return sorted_hand
 
-def score_hand(single_hand):
+def score_hand(single_hand, ranks, suits):
     '''Returns the point value of a hand based on rank and suit'''
     total = 0
     for card in single_hand:
         if card == "error":
             total += 0
         else:
-            card_score = rank[card[0]] * suit[card[1]]
+            card_score = ranks[card[0]] * suits[card[1]]
             total += card_score
     return total
 
-rank = {
-    '2': 2,
-    '3': 3,
-    '4': 4,
-    '5': 5,
-    '6': 6,
-    '7': 7,
-    '8': 8,
-    '9': 9,
-    'T': 10,
-    'J': 11,
-    'Q': 12,
-    'K': 13,
-    'A': 14
-}
+def main():
+    rank = {
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5,
+        '6': 6,
+        '7': 7,
+        '8': 8,
+        '9': 9,
+        'T': 10,
+        'J': 11,
+        'Q': 12,
+        'K': 13,
+        'A': 14
+    }
 
-suit = {
-    's': 1,
-    'd': 2,
-    'h': 3,
-    'c': 4
-}
+    suit = {
+        's': 1,
+        'd': 2,
+        'h': 3,
+        'c': 4
+    }
 
-sorted_deck = []
-for single_suit in suit:
-    for single_rank in rank:
-        sorted_deck.append(single_rank + single_suit)
-print(f"Starting Deck: {sorted_deck}")
+    dealt_sorted_deck = []
+    for single_suit in suit:
+        for single_rank in rank:
+            dealt_sorted_deck.append(single_rank + single_suit)
+    print(f"Starting Deck: {dealt_sorted_deck}")
 
-shuffled_deck = shuffle_deck(sorted_deck)
-print(f"Shuffled Deck: {shuffled_deck}")
+    shuffled_deck = shuffle_deck(dealt_sorted_deck)
+    print(f"Shuffled Deck: {shuffled_deck}")
 
-game_players = int(input("How many players? "))
-game_cards_each = int(input("How many cards each? "))
+    game_players = int(input("How many players? "))
+    game_cards_each = int(input("How many cards each? "))
 
-hands = play_a_game(shuffled_deck, game_players, game_cards_each)
-print(f"Dealt Hands: {hands}")
-sorted_hands = [sort_hand(hand) for hand in hands]
-print(f"Sorted Hands: {sorted_hands}")
+    hands = play_a_game(shuffled_deck, game_players, game_cards_each)
+    print(f"Dealt Hands: {hands}")
+    sorted_hands = [sort_hand(hand, dealt_sorted_deck) for hand in hands]
+    print(f"Sorted Hands: {sorted_hands}")
 
-scores = [score_hand(hand) for hand in hands]
-winner = scores.index(max(scores))
-print(f"Player {winner + 1} wins with {sorted_hands[winner]}")
-unique_scores = sorted(set(scores), reverse=True)
-rank_indx = {score: rank for rank, score in enumerate(unique_scores)}
-ranks = [rank_indx[score] for score in scores]
-print(f"Player Scores: {scores}")
-print(f"Player Ranks: {ranks}")
-for rank in range(game_players):
-    rank_indices = [i for i, v in enumerate(ranks) if v == rank]
-    for h in rank_indices:
-        print(f"Player {h + 1} had {sorted_hands[h]} for a score of {scores[h]} and rank {ranks[h] + 1}")
+    scores = [score_hand(hand, rank, suit) for hand in hands]
+    winner = scores.index(max(scores))
+    print(f"Player {winner + 1} wins with {sorted_hands[winner]}")
+    unique_scores = sorted(set(scores), reverse=True)
+    rank_indx = {score: rank for rank, score in enumerate(unique_scores)}
+    ranks = [rank_indx[score] for score in scores]
+    print(f"Player Scores: {scores}")
+    print(f"Player Ranks: {ranks}")
+    for rank in range(game_players):
+        rank_indices = [i for i, v in enumerate(ranks) if v == rank]
+        for h in rank_indices:
+            print(f"Player {h + 1} had {sorted_hands[h]} for a score of {scores[h]} and rank {ranks[h] + 1}")
+
+if __name__ == '__main__':
+    main()
